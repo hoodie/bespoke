@@ -20,17 +20,19 @@ Default: **full**. Switch: `/bespoke lite|full|ultra`.
 
 Stop at the first rung that holds:
 
-1. **Domain need?** Script, glue code, throwaway — stop. Say so in one line.
+1. **Domain need?** Script, glue code, throwaway: stop. Say so in one line.
 2. **Already modelled?** Reuse the existing newtype or validated type.
-3. **Primitive fine?** Clear name, no confusion risk — leave it. Don't wrap for wrapping's sake.
+3. **Primitive fine?** Clear name, no confusion risk: leave it. Don't wrap for wrapping's sake.
 4. **Two values confused?** Add a newtype. `UserId` != `ProductId`; compiler should know.
 5. **Invalid state representable?** Encode valid states. `Option<T>` beats nullable + `bool` + comment.
 6. **Construction can fail?** Smart constructor. Return `Result`.
 7. **Caller must act on return?** `#[must_use]`. One attribute, zero runtime cost.
-8. **Static state transition preconditions?** Typestate — only if states are compile-time known.
+8. **Static state transition preconditions?** Typestate, only if states are compile-time known.
 
 ## Rules
 
+- The type system is the cheapest reviewer on the team. A bug it rejects needs no test, no review, no postmortem. Prefer encoding invariants in types over testing for them at runtime.
+- Where there is no type system worth trusting (YAML, CSS, shell), reach for convention and naming instead.
 - Callsite first, then definition. Ergonomic to call right, awkward to call wrong.
 - `From`/`Into` where they read naturally. Not everywhere.
 - Consistent naming: codebase uses `UserId`, new one is `OrderId` not `OrderIdentifier`.
@@ -51,7 +53,7 @@ What clears the filter gets logged to the BDR and announced in the response.
 
 ## Communicating decisions
 
-Every non-trivial type decision is announced inline in the chat response — never as a comment in source code. Format:
+Every non-trivial type decision is announced inline in the chat response, never as a comment in source code.
 
 `[bespoke: newtype UserId/ProductId prevents ID confusion, +8 lines]`
 
@@ -61,7 +63,7 @@ Flag close calls: `[bespoke: ..., ponytail would push back here]`.
 
 ## The Bespoke Decision Record (BDR)
 
-Maintain `bespoke-decisions.md` at the project root. It is a PR artifact — created at the start of a branch, deleted on merge.
+Maintain `bespoke-decisions.md` at the project root. It is a PR artifact, created at the start of a branch and deleted on merge.
 
 On first decision in a project, create it from `bdr-template.md` (relative to this skill's directory).
 
@@ -71,7 +73,7 @@ Log every decision that clears the YAGNI filter:
 | --- | ----------------- | -------- | --------- | ----- | --------- |
 
 - **#**: 1-based integer.
-- **Symbol / Location**: type name, function name, or `file.rs:L42` — enough to find it.
+- **Symbol / Location**: type name, function name, or `file.rs:L42`. Enough to find it.
 - **Decision**: what bespoke did.
 - **Rationale**: one clause, why it earns its keep.
 - **Lines**: e.g. `+8`.
@@ -118,13 +120,13 @@ Example: "Add a `user_id: String` field."
 
 - **lite:** "Done. FYI: `UserId(String)` newtype would prevent passing a `product_id` by accident."
 - **full:** "Used `UserId(String)`. `[bespoke: prevents mixing with ProductId, +4 lines]`. Added `From<UserId> for String`."
-- **ultra:** "Rejected raw `String` — too easy to pass a `ProductId`. Using `UserId(String)` with private inner and smart constructor. Want raw `String`? Say so."
+- **ultra:** "Rejected raw `String` . Too easy to pass a `ProductId`. Using `UserId(String)` with private inner and smart constructor. Want raw `String`? Say so."
 
 ## When NOT to be bespoke
 
 - Scripts, glue, one-off tools.
-- Throwaway prototypes — types come in the second pass.
-- No domain invariants to encode — don't invent them.
+- Throwaway prototypes. Types come in the second pass.
+- No domain invariants to encode. Don't invent them.
 - User said "just make it work" or "normal mode".
 
 User insists on simpler → build it, note the tradeoff in the response, move on.

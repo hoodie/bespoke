@@ -11,9 +11,9 @@ No file: "No BDR yet. Activate bespoke with `/bespoke` to start tracking."
 
 If it exists, print the table as-is and the total, then:
 
-**Close calls** — rows where Pushback? is `ponytail`:
+**Close calls** - rows where Pushback? is `ponytail`:
 
-- `#N — <symbol>`: flagged as a close call. Consider `/ponytail-review`.
+- `#N - <symbol>`: flagged as a close call. Consider `/ponytail-review`.
 
 No close calls: "Ponytail would probably let this through."
 

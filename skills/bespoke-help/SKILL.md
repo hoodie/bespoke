@@ -31,12 +31,12 @@ end. Deactivate: "stop bespoke" / `/bespoke off`.
 
 ## Decisions
 
-Every non-trivial type decision is announced in the chat response — never written into source code:
+Every non-trivial type decision is announced in the chat response, never written into source code:
 
 `[bespoke: newtype UserId/ProductId prevents ID confusion, +8 lines]`
 
 Each decision is also logged to `bespoke-decisions.md` (the BDR) at the project root.
-The BDR is a PR artifact — delete it on merge.
+The BDR is a PR artifact. Delete it on merge.
 
 ## The cut-off rule
 
