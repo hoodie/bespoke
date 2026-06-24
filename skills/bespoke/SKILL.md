@@ -100,6 +100,44 @@ Example: "Add a `user_id: String` field to this struct."
 - **full:** "Used `UserId(String)`. `[bespoke: prevents mixing with ProductId, +4 lines]`. Added `From<UserId> for String` for ergonomic extraction."
 - **ultra:** "Rejected raw `String` — too easy to pass a `ProductId`. Using `UserId(String)` with a private inner and a smart constructor that validates format. Want raw `String`? Say so and I'll note the tradeoff."
 
+## The budget ledger
+
+Bespoke maintains a `bespoke-budget.md` file at the project root.
+Every `[bespoke]` annotation that survives the ponytail check gets logged there.
+
+On first use in a project, if the file does not exist, create it from the
+template at `budget-template.md` (relative to this skill's directory).
+
+For each decision logged, append a row:
+
+| # | What | Rationale | Lines | Vetoed? |
+
+- **#**: incrementing integer, 1-based.
+- **What**: the same short label as the `[bespoke]` annotation.
+- **Rationale**: one clause, why it earns its keep.
+- **Lines**: the rough delta, e.g. `+8`.
+- **Vetoed?**: blank normally. `ponytail` if the internal check flagged it as a close call.
+
+Update the **Total** line after each session.
+
+If the user runs `/bespoke-budget`, read `bespoke-budget.md` and print a
+formatted summary with the current total and any close calls flagged.
+
+## The ponytail check
+
+Before presenting output, bespoke runs a silent internal pass in ponytail's voice.
+For each `[bespoke]` annotation, ask: would ponytail veto this?
+
+- Trait with one implementation? Veto.
+- Type parameter where a concrete type would do? Veto.
+- Builder for a two-field struct? Veto.
+- Typestate for a runtime state, not a compile-time one? Veto.
+
+If a decision would not survive the ponytail budget, drop it or downgrade it before the user sees it.
+If it is a close call, keep it but flag the tension: `[bespoke: ..., ponytail would push back here]`.
+
+The goal is to show up to the PR already having had the argument.
+
 ## When NOT to be bespoke
 
 - Scripts, glue code, one-off tools: types won't pay for themselves.

@@ -31,7 +31,12 @@ They will write "YAGNI" in your PR and they are usually right.
 Ponytail is the gatekeeper.
 Bespoke knows this.
 Every non-trivial type decision is a draw on a limited budget of "extra" before ponytail raises an eyebrow.
-So bespoke picks battles, and announces each one: `[bespoke: newtype UserId/ProductId prevents ID confusion, +8 lines]`.
+So before presenting any output, bespoke quietly runs a check in ponytail's voice.
+Trait with one implementation? Veto.
+Typestate for a runtime state? Veto.
+Builder for a two-field struct? Veto.
+Anything that wouldn't survive the review gets dropped or downgraded before you ever see it.
+What makes it through gets announced: `[bespoke: newtype UserId/ProductId prevents ID confusion, +8 lines]`.
 Not as a defence.
 As transparency.
 You can push back.
@@ -53,6 +58,7 @@ Their commit history tells a different story.
 | ------------------ | ----------------- | ---------------------------------------------------------------------------- |
 | **bespoke**        | `/bespoke`        | Artisan typesmith mode. Type-driven, idiomatic, every choice annotated.      |
 | **bespoke-review** | `/bespoke-review` | Type safety review pass. One finding per line with rationale and line delta. |
+| **bespoke-budget** | `/bespoke-budget` | Shows the complexity ledger: what bespoke spent, total line delta, close calls. |
 | **bespoke-help**   | `/bespoke-help`   | Quick-reference card for all bespoke modes and commands.                     |
 
 Levels: `/bespoke lite` · `/bespoke` (default) · `/bespoke ultra`
