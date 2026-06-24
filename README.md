@@ -30,18 +30,10 @@ They will write "YAGNI" in your PR and they are usually right.
 
 Ponytail is the gatekeeper.
 Bespoke knows this.
-Every non-trivial type decision is a draw on a limited budget of "extra" before ponytail raises an eyebrow.
-So before presenting any output, bespoke quietly runs a check in ponytail's voice.
-Trait with one implementation? Veto.
-Typestate for a runtime state? Veto.
-Builder for a two-field struct? Veto.
-Anything that wouldn't survive the review gets dropped or downgraded before you ever see it.
-What makes it through gets announced: `[bespoke: newtype UserId/ProductId prevents ID confusion, +8 lines]`.
-Not as a defence.
-As transparency.
-You can push back.
-Ponytail can push back.
-The complexity does not sneak in.
+Every non-trivial type decision gets logged to a decision record on the branch,
+with what was added, why, and how many lines it cost.
+When that log gets long enough, ponytail gets called in to review it.
+Nothing sneaks through — it just gets a fair hearing first.
 
 Ponytail will never say bespoke is right.
 But when a library ships and nobody files a bug about argument-order confusion for two years,
@@ -54,12 +46,12 @@ Their commit history tells a different story.
 
 ## Skills
 
-| Skill              | Trigger           | What it does                                                                 |
-| ------------------ | ----------------- | ---------------------------------------------------------------------------- |
-| **bespoke**        | `/bespoke`        | Artisan typesmith mode. Type-driven, idiomatic, every choice annotated.      |
-| **bespoke-review** | `/bespoke-review` | Type safety review pass. One finding per line with rationale and line delta. |
-| **bespoke-budget** | `/bespoke-budget` | Shows the complexity ledger: what bespoke spent, total line delta, close calls. |
-| **bespoke-help**   | `/bespoke-help`   | Quick-reference card for all bespoke modes and commands.                     |
+| Skill              | Trigger           | What it does                                                                |
+| ------------------ | ----------------- | --------------------------------------------------------------------------- |
+| **bespoke**        | `/bespoke`        | Artisan typesmith mode. Type-driven, idiomatic, every decision logged.      |
+| **bespoke-review** | `/bespoke-review` | Type safety review. One finding per line with rationale and line delta.     |
+| **bespoke-bdr**    | `/bespoke-bdr`    | Show the Bespoke Decision Record: what was added, why, and any close calls. |
+| **bespoke-help**   | `/bespoke-help`   | Quick-reference card for all bespoke modes and commands.                    |
 
 Levels: `/bespoke lite` · `/bespoke` (default) · `/bespoke ultra`
 
