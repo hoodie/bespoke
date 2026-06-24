@@ -11,9 +11,16 @@ One finding per line. Goal: ergonomic to call correctly, awkward to call wrong.
 
 ## Format
 
-`<file>:L<line>: <tag>: <what>. <fix>.`
+Group findings under a short bold title with the file and line reference on the same line.
+Do NOT use em-dashes. Use a space or nothing between the title and the location.
+
+```
+**<index>.** `<file>:<line>`: **Short title**
+<tag>: <what>. <fix>. [+/- N lines]
+```
 
 Tags:
+
 - `newtype:` two primitives that could be confused. Wrap one or both.
 - `invalid-state:` field combo that shouldn't exist. Use enum or typestate.
 - `constructor:` construction can fail but returns raw value. Return `Result`.
@@ -23,12 +30,23 @@ Tags:
 
 ## Examples
 
-`auth.rs:L14: newtype: UserId and TeamId are both u64. Swap one call and the compiler won't notice.`
-`session.rs:L32: invalid-state: connected: bool + socket: Option<Socket>. Use enum Connected(Socket) | Disconnected.`
-`config.rs:L8: constructor: Config::new returns Self, panics on bad input. Return Result<Self, ConfigError>.`
-`pipeline.rs:L55: must-use: process() returns an error code callers ignore. Add #[must_use].`
-`client.rs:L20: ergonomics: every callsite does Url::parse(...).unwrap(). impl From<&str> for Endpoint.`
-`handler.rs:L77: idiom: manual Option chaining. Use and_then / map / ok_or.`
+**1.** `auth.rs:14`: **Swappable IDs**
+newtype: UserId and TeamId are both u64. Swap one call and the compiler won't notice.
+
+**2.** `session.rs:32`: **Connected state**
+invalid-state: connected: bool + socket: Option<Socket>. Use enum Connected(Socket) | Disconnected.
+
+**3.** `config.rs:8`: **Panicking constructor**
+constructor: Config::new returns Self, panics on bad input. Return Result<Self, ConfigError>.
+
+**4.** `pipeline.rs:55`: **Silent error code**
+must-use: process() returns an error code callers ignore. Add #[must_use].
+
+**5.** `client.rs:20`: **Url boilerplate**
+ergonomics: every callsite does Url::parse(...).unwrap(). impl From<&str> for Endpoint.
+
+**6.** `handler.rs:77`: **Manual Option chain**
+idiom: manual Option chaining. Use and_then / map / ok_or.
 
 ## Scoring
 
