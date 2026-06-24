@@ -7,29 +7,13 @@ description: Shows a summary of the current bespoke complexity budget for the pr
 
 Read `bespoke-budget.md` from the project root.
 
-If the file does not exist, say: "No budget yet. Bespoke hasn't made any
-non-trivial type decisions in this project, or the file hasn't been created.
-Activate bespoke with `/bespoke` to start tracking."
+No file: "No budget yet. Activate bespoke with `/bespoke` to start tracking."
 
-If it exists, print a summary in this format:
+If it exists, print the table as-is, the total, then:
 
----
+**Close calls** — rows where Vetoed? is `ponytail`:
+- `#N — <what>`: ponytail flagged this. Consider `/ponytail-review`.
 
-## Bespoke Budget
+No close calls: "Ponytail would probably let this through."
 
-| # | What | Rationale | Lines | Vetoed? |
-|---|------|-----------|-------|---------|
-| (rows from file) |
-
-**Total spent: +N lines**
-
-### Close calls
-List any rows where Vetoed? is `ponytail`, one per line:
-- `#N — <what>`: ponytail flagged this. Still in? Consider `/ponytail-review`.
-
-If no close calls: "No close calls. Ponytail would probably let this through."
-
----
-
-After the summary, offer: "Want a full ponytail review of these decisions?
-Run `/ponytail-review`."
+Offer: "Want a full review? Run `/ponytail-review`."

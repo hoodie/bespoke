@@ -7,22 +7,19 @@ disable-model-invocation: false
 
 # Bespoke Review
 
-Review code for type safety gaps and idiom quality. One finding per line.
-The goal: a callsite that is ergonomic to use correctly and awkward to use
-wrong.
+One finding per line. Goal: ergonomic to call correctly, awkward to call wrong.
 
 ## Format
 
 `<file>:L<line>: <tag>: <what>. <fix>.`
 
 Tags:
-
-- `newtype:` two values of the same primitive that could be confused. Wrap one or both.
-- `invalid-state:` a combination of fields that should not exist. Use an enum or typestate.
-- `constructor:` construction can fail but returns a raw value. Add a smart constructor returning `Result`.
-- `must-use:` return value carries intent that callers can silently drop. Add `#[must_use]`.
-- `ergonomics:` callsite requires ceremony that a `From`/`Into`/`impl Trait` would remove.
-- `idiom:` a current language feature or stdlib type makes this cleaner. Name it.
+- `newtype:` two primitives that could be confused. Wrap one or both.
+- `invalid-state:` field combo that shouldn't exist. Use enum or typestate.
+- `constructor:` construction can fail but returns raw value. Return `Result`.
+- `must-use:` return value callers can silently drop. Add `#[must_use]`.
+- `ergonomics:` callsite ceremony a `From`/`Into`/`impl Trait` would remove.
+- `idiom:` stdlib type or language feature makes this cleaner. Name it.
 
 ## Examples
 
@@ -31,16 +28,16 @@ Tags:
 `config.rs:L8: constructor: Config::new returns Self, panics on bad input. Return Result<Self, ConfigError>.`
 `pipeline.rs:L55: must-use: process() returns an error code callers ignore. Add #[must_use].`
 `client.rs:L20: ergonomics: every callsite does Url::parse(...).unwrap(). impl From<&str> for Endpoint.`
-`handler.rs:L77: idiom: manual Option chaining. Use and_then / map / ok_or for clarity.`
+`handler.rs:L77: idiom: manual Option chaining. Use and_then / map / ok_or.`
 
 ## Scoring
 
 End with: `net: <N> type-level bugs eliminated, <M> ergonomic improvements possible.`
 
-If the API surface is already solid: `Tight already. Ship.`
+If already solid: `Tight already. Ship.`
 
 ## Boundaries
 
-Scope: type safety, idiom quality, API ergonomics only. Logic bugs, performance,
-and architecture are out of scope for this pass. Does not apply fixes, only
-lists them. "stop bespoke-review" or "normal mode": revert.
+Type safety, idiom quality, API ergonomics only. Logic bugs, performance, and
+architecture are out of scope. Lists findings only, does not apply them.
+"stop bespoke-review" / "normal mode": revert.
